@@ -7,10 +7,16 @@
 import string
 
 def main():
-    Room = Area("It is a nice place")
-    Place = Area("It's a place. Not a thing.")
-    Areas = [Room, Place]
-    P = Player(["Keys", "Lemon", "The Monkey"], Room.description, Areas)
+    ##Initilization of variables.
+    ##This is a test until I find a cleaner implementation
+    Bed = Area("It is a nice bed. Don't sleep.")
+    Desk = Area("It's a desk. Not a good one.")
+    Areas = {"Bed"  :   Bed,
+             "Desk" :   Desk
+             }
+    P = Player(["Keys", "Lemon", "The Monkey"],
+               Areas["Bed"], Areas)
+    ##Commands
     commands = {"Inventory" :   check_inventory,
                 "Pickup"    :   add_inventory,
                 "Inspect"   :   player_look,
@@ -20,6 +26,7 @@ def main():
     goalComplete = False
     while not goalComplete:
         #break
+        print P.positions
         playerInput = raw_input(">> ")
         #check = checkCmnd(playerInput, commands)
         check = string.split(playerInput)
@@ -37,14 +44,19 @@ def checkCmnd(x, commands):
         print "You have become confused"
 
 #Check if player has completed goal
+#Not actually doing anything yet
 def checkGoal():
     pass
 
+#Player movement around areas or something.
+#This is up in the air how I will implement this
+#But I will figure out what I will do with this
 def player_move(P):
-    choice = raw_input("Where do you want to go?")
-    for choice in P.areas:
-        print P.areas[1]
-        P.location = P.areas[1]
+    choice = str(raw_input("Where do you want to go?"))
+    print choice
+    for choice in P.positions:
+        print P.positions[str(choice)]
+        P.location = P.location[str(choice)]
 
 def player_look(Room):
     print Room.location
@@ -69,10 +81,10 @@ class Item:
 
 #Player Class
 class Player:
-    def __init__(self, inventory, location, areas):
+    def __init__(self, inventory, location, positions):
         self.inventory = inventory
         self.location = location
-        self.areas = areas
+        self.positions = positions
 
 
 class Area:
