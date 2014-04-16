@@ -11,11 +11,11 @@ def main():
     ##This is a test until I find a cleaner implementation
     Bed = Area("It is a nice bed. Don't sleep.")
     Desk = Area("It's a desk. Not a good one.")
-    Areas = {"Bed"  :   Bed,
-             "Desk" :   Desk
+    Areas = {"Bed"  :   Bed.description,
+             "Desk" :   Desk.description
              }
     P = Player(["Keys", "Lemon", "The Monkey"],
-               Areas["Bed"], Areas)
+               "Bed", Areas)
     ##Commands
     commands = {"Inventory" :   check_inventory,
                 "Pickup"    :   add_inventory,
@@ -54,14 +54,15 @@ def checkGoal():
 #This is up in the air how I will implement this
 #But I will figure out what I will do with this
 def player_move(P):
-    choice = raw_input("Where do you want to go?")
+    choice = str(raw_input("Where do you want to go?"))
     print choice
     for choice in P.positions:
-        print P.location
-        P.location = P.location
+        #print P.location
+        P.location = choice
 
 def player_look(Player):
-    print Player.location
+    for Player.location in Player.positions[str(Player.location)]:
+        print Player.positions[str(Player.location)]
 
 def check_inventory(Player):
     print Player.inventory
