@@ -25,9 +25,11 @@ def main():
     print("You are in a room")
     goalComplete = False
     while not goalComplete:
+        playerInput = ''
         #break
-        print P.positions
-        playerInput = raw_input(">> ")
+        #print P.positions
+        while playerInput == '':
+            playerInput = raw_input(">> ")
         #check = checkCmnd(playerInput, commands)
         check = string.split(playerInput)
         inputCheck = checkCmnd(check[0], commands)
@@ -52,17 +54,17 @@ def checkGoal():
 #This is up in the air how I will implement this
 #But I will figure out what I will do with this
 def player_move(P):
-    choice = str(raw_input("Where do you want to go?"))
+    choice = raw_input("Where do you want to go?")
     print choice
     for choice in P.positions:
-        print P.positions[str(choice)]
-        P.location = P.location[str(choice)]
+        print P.location
+        P.location = P.location
 
-def player_look(Room):
-    print Room.location
+def player_look(Player):
+    print Player.location
 
-def check_inventory(self):
-    print self.inventory
+def check_inventory(Player):
+    print Player.inventory
 
 def add_inventory(item):
     self.inventory.append(item)
@@ -81,7 +83,7 @@ class Item:
 
 #Player Class
 class Player:
-    def __init__(self, inventory, location, positions):
+    def __init__(self, inventory, location = None, positions = None):
         self.inventory = inventory
         self.location = location
         self.positions = positions
