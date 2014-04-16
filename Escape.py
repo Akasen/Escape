@@ -9,10 +9,16 @@ import string
 def main():
     ##Initilization of variables.
     ##This is a test until I find a cleaner implementation
-    Bed = Area("It is a nice bed. Don't sleep.")
-    Desk = Area("It's a desk. Not a good one.")
+    Bed =   Area("It is a nice bed. Don't sleep.")
+    Desk =  Area("It's a desk. Not a good one.")
+    Door =  Area("The door. It is currently closed. Also loacked")
+    TV =    Area("It's a nice LSD TV. It's out of"
+                 "this world man!")
+    
     Areas = {"Bed"  :   Bed.description,
-             "Desk" :   Desk.description
+             "Desk" :   Desk.description,
+             "Door" :   Door.description,
+             "TV"   :   TV.description
              }
     P = Player(["Keys", "Lemon", "The Monkey"],
                "Bed", Areas)
@@ -54,15 +60,20 @@ def checkGoal():
 #This is up in the air how I will implement this
 #But I will figure out what I will do with this
 def player_move(P):
-    choice = str(raw_input("Where do you want to go?"))
+    choice = str(raw_input("Where do you want to go? \n>> "))
     print choice
-    for choice in P.positions:
-        #print P.location
+    if choice in P.positions:
         P.location = choice
+        print "You move towards the " +P.location
+    else:
+        print "Location does not exist in this room"
+
 
 def player_look(Player):
-    for Player.location in Player.positions[str(Player.location)]:
-        print Player.positions[str(Player.location)]
+    place = str(Player.location)
+    if Player.location in Player.positions:
+        print Player.positions[str(place)]
+        
 
 def check_inventory(Player):
     print Player.inventory
