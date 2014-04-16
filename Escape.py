@@ -9,17 +9,23 @@ import string
 def main():
     ##Initilization of variables.
     ##This is a test until I find a cleaner implementation
-    Bed =   Area("It is a nice bed. Don't sleep.")
-    Desk =  Area("It's a desk. Not a good one.")
-    Door =  Area("The door. It is currently closed. Also loacked")
-    TV =    Area("It's a nice LSD TV. It's out of"
-                 "this world man!")
     
+    ##Locations
+    Bed =   Area("It is a nice bed with many soft pillows."
+                 +" The blankets are are soft and inviting."
+                 +" You try to get the thought of houw comfy"
+                 +" the mattress was.")
+    Desk =  Area("It's a desk. Not a good one.")
+    Door =  Area("The only door in this room. It is currently closed.")
+    TV =    Area("It's a nice LSD TV. It's out of"
+                 " this world man!")
+    ##Dictionary of locations
     Areas = {"Bed"  :   Bed.description,
              "Desk" :   Desk.description,
              "Door" :   Door.description,
              "TV"   :   TV.description
              }
+    ##Player initialization
     P = Player(["Keys", "Lemon", "The Monkey"],
                "Bed", Areas)
     ##Commands
@@ -28,15 +34,14 @@ def main():
                 "Inspect"   :   player_look,
                 "Move"      :   player_move
                 }
-    print("You are in a room")
+    print("You have waken up after a nice rest. But you don't"
+          +" remember falling asleep. You don't remember this room."
+          +" You get out of bed and find yourself in a normal room.")
     goalComplete = False
     while not goalComplete:
         playerInput = ''
-        #break
-        #print P.positions
         while playerInput == '':
             playerInput = raw_input(">> ")
-        #check = checkCmnd(playerInput, commands)
         check = string.split(playerInput)
         inputCheck = checkCmnd(check[0], commands)
         if inputCheck in commands:
@@ -60,7 +65,13 @@ def checkGoal():
 #This is up in the air how I will implement this
 #But I will figure out what I will do with this
 def player_move(P):
-    choice = str(raw_input("Where do you want to go? \n>> "))
+    keyList = []
+    
+    print("Where do you want to go?")
+    for keys in P.positions:
+        keyList.append(keys)
+    print keyList
+    choice = str(raw_input(">> "))
     print choice
     if choice in P.positions:
         P.location = choice
@@ -95,16 +106,15 @@ class Item:
 
 #Player Class
 class Player:
-    def __init__(self, inventory, location = None, positions = None):
+    def __init__(self, inventory, location, positions):
         self.inventory = inventory
         self.location = location
         self.positions = positions
 
 
 class Area:
-    def __init__(self, description):
+    def __init__(self, description, interaction = None):
         self.description = description
+        self.interaction = interaction
     
-
-#P = Player(["Keys", "God", "Chuck"])
 main()
