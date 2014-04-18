@@ -16,14 +16,14 @@ def main():
     ##Dictionary of locations
     ##Was originally set as Area.description.
     ##Realized flaw when items need to be picked up
-    Areas = {"Bed"  :   Bed,
-             "Desk" :   Desk,
-             "Door" :   Door,
-             "TV"   :   TV
+    AreaDesc = {"Bed"  :   Bed.description,
+             "Desk" :   Desk.description,
+             "Door" :   Door.description,
+             "TV"   :   TV.description
              }
     ##Player initialization
     P = Player(["Keys", "Lemon", "The Monkey"],
-               "Bed", Areas)
+               "Bed", AreaDesc)
     ##Commands
     commands = {"Inventory" :   checkInventory,
                 "Pickup"    :   addInventory,
@@ -118,10 +118,10 @@ class Item:
 
 #Player Class
 class Player:
-    def __init__(self, inventory, location, positions):
+    def __init__(self, inventory, location, localDescription):
         self.inventory = inventory
         self.location = location
-        self.positions = positions
+        self.localDescription = localDescription
 
 
 class Area:
