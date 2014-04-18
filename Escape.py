@@ -1,9 +1,3 @@
-
-##Notes for future
-## Commands are not properly outputing at all
-## I do not think the commands have to be in the class.
-## Should be defined out of main
-
 import string
 
 def main():
@@ -14,29 +8,32 @@ def main():
     Bed =   Area("It is a nice bed with many soft pillows."
                  +" The blankets are are soft and inviting."
                  +" You try to get the thought of houw comfy"
-                 +" the mattress was.")
-    Desk =  Area("It's a desk. Not a good one.")
+                 +" the mattress was.", "Pillow")
+    Desk =  Area("It's a desk. Not a good one.", "Pen")
     Door =  Area("The only door in this room. It is currently closed.")
     TV =    Area("It's a nice LSD TV. It's out of"
-                 " this world man!")
+                 " this world man!", "Remote")
     ##Dictionary of locations
-    Areas = {"Bed"  :   Bed.description,
-             "Desk" :   Desk.description,
-             "Door" :   Door.description,
-             "TV"   :   TV.description
+    ##Was originally set as Area.description.
+    ##Realized flaw when items need to be picked up
+    Areas = {"Bed"  :   Bed,
+             "Desk" :   Desk,
+             "Door" :   Door,
+             "TV"   :   TV
              }
     ##Player initialization
     P = Player(["Keys", "Lemon", "The Monkey"],
                "Bed", Areas)
     ##Commands
-    commands = {"Inventory" :   check_inventory,
-                "Pickup"    :   add_inventory,
-                "Inspect"   :   player_look,
-                "Move"      :   player_move
+    commands = {"Inventory" :   checkInventory,
+                "Pickup"    :   addInventory,
+                "Inspect"   :   playerLook,
+                "Move"      :   playerMove,
+                "Use"       :   playerUse
                 }
     print("You have waken up after a nice rest. But you don't"
           +" remember falling asleep. You don't remember this room."
-          +" You get out of bed and find yourself in a normal room.")
+          +" You get out of bed and find yourself in a normal room.\n")
     goalComplete = False
     while not goalComplete:
         playerInput = ''
@@ -50,6 +47,19 @@ def main():
         goalComplete = checkGoal()
 
 #Check to see if inputted commands exist
+
+
+##Idea - Make all player input handled by function or functions
+##the player input gets parsed. The first word is an action.
+##The second word should call for something. I don't know
+#--Understand "Use" and "Move".
+def playerInputCheck(Player):
+        playerInput = ''
+        while playerInput == '':
+            playerInput = raw_input(">> ")
+        check = string.split(playerInput)
+        inputCheck = checkCmnd(check[0], commands)
+
 def checkCmnd(x, commands):
     if x in commands:
         return x
@@ -64,7 +74,7 @@ def checkGoal():
 #Player movement around areas or something.
 #This is up in the air how I will implement this
 #But I will figure out what I will do with this
-def player_move(P):
+def playerMove(P):
     keyList = []
     
     print("Where do you want to go?")
@@ -80,16 +90,18 @@ def player_move(P):
         print "Location does not exist in this room"
 
 
-def player_look(Player):
+def playerLook(Player):
     place = str(Player.location)
     if Player.location in Player.positions:
         print Player.positions[str(place)]
         
+def playerUse(Player):
+    pass
 
-def check_inventory(Player):
+def checkInventory(Player):
     print Player.inventory
 
-def add_inventory(item):
+def addInventory(item):
     self.inventory.append(item)
 
 
@@ -113,8 +125,9 @@ class Player:
 
 
 class Area:
-    def __init__(self, description, interaction = None):
+    def __init__(self, description, interaction = None, items = None):
         self.description = description
         self.interaction = interaction
+        self.items = items
     
 main()
