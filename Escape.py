@@ -1,29 +1,41 @@
 import string
 
+##Current goal - Picking up items and using items
+
 def main():
     ##Initilization of variables.
-    ##This is a test until I find a cleaner implementation
+
+    ##Items
     
     ##Locations
-    Bed =   Area("It is a nice bed with many soft pillows."
-                 +" The blankets are are soft and inviting."
-                 +" You try to get the thought of houw comfy"
-                 +" the mattress was.", "Pillow")
-    Desk =  Area("It's a desk. Not a good one.", "Pen")
-    Door =  Area("The only door in this room. It is currently closed.")
-    TV =    Area("It's a nice LSD TV. It's out of"
+    Bed =   Area("Bed", "It is a nice bed with many soft pillows."
+                 " The blankets are are soft and inviting."
+                 " You try to get the thought of how comfy"
+                 " the mattress was.", "Pillow")
+    Desk =  Area("Desk", "It's a desk. Not a good one.", "Screwdriver")
+    Door =  Area("Door", "The only door in this room. It is currently closed.",
+                 "Poster")
+    TV =    Area("TV","It's a nice LSD TV. It's out of"
                  " this world man!", "Remote")
-    ##Dictionary of locations
-    ##Was originally set as Area.description.
+    
+    AreaItem = {"Bed"  :   Bed.item,
+             "Desk" :   Desk.item,
+             "Door" :   Door.item,
+             "TV"   :   TV.item
+             }    
+    
+    
     ##Realized flaw when items need to be picked up
     AreaDesc = {"Bed"  :   Bed.description,
              "Desk" :   Desk.description,
              "Door" :   Door.description,
              "TV"   :   TV.description
              }
+    Areas = (Bed, Desk, Door, TV),("Bed", "Desk", "Door", "TV"),(Bed.item, Desk.item, TV.item)
+    print Areas[0][0].item
     ##Player initialization
-    P = Player(["Keys", "Lemon", "The Monkey"],
-               "Bed", AreaDesc)
+    P = Player(("Keys", "Lemon", "The Monkey"),
+               "Bed", Areas)
     ##Commands
     commands = {"Inventory" :   checkInventory,
                 "Pickup"    :   addInventory,
@@ -36,16 +48,8 @@ def main():
           +" You get out of bed and find yourself in a normal room.\n")
     goalComplete = False
     while not goalComplete:
-        playerInput = ''
-        while playerInput == '':
-            playerInput = raw_input(">> ")
-        check = string.split(playerInput)
-        inputCheck = checkCmnd(check[0], commands)
-        if inputCheck in commands:
-            commands[inputCheck](P)
-            
+        playerInputCheck(P, commands)
         goalComplete = checkGoal()
-
 #Check to see if inputted commands exist
 
 
@@ -53,12 +57,16 @@ def main():
 ##the player input gets parsed. The first word is an action.
 ##The second word should call for something. I don't know
 #--Understand "Use" and "Move".
-def playerInputCheck(Player):
-        playerInput = ''
-        while playerInput == '':
-            playerInput = raw_input(">> ")
-        check = string.split(playerInput)
-        inputCheck = checkCmnd(check[0], commands)
+def playerInputCheck(Player, commands):
+    #Word list of player choice actions
+    actions = ["Pickup", "Look", "Inspect", "Use", "Move", "Walk, Inventory"]
+    playerInput = ''
+    while playerInput == '':
+        playerInput = raw_input(">> ")
+    check = string.split(playerInput)
+    inputCheck = checkCmnd(check[0], commands)
+    if inputCheck in commands:
+        commands[inputCheck](Player)
 
 def checkCmnd(x, commands):
     if x in commands:
@@ -78,22 +86,24 @@ def playerMove(P):
     keyList = []
     
     print("Where do you want to go?")
-    for keys in P.positions:
+    for keys in P.localDesc[1]:
         keyList.append(keys)
     print keyList
     choice = str(raw_input(">> "))
     print choice
-    if choice in P.positions:
+    if choice in P.location[1]:
+        print "You are already here"
+    elif choice in P.localDesc[1]:
         P.location = choice
         print "You move towards the " +P.location
     else:
         print "Location does not exist in this room"
-
-
+#
+#Indexes room
+#Player.localDesc[1].index(Player.location)
 def playerLook(Player):
-    place = str(Player.location)
-    if Player.location in Player.positions:
-        print Player.positions[str(place)]
+    #if Player.location in Player.localDesc[1]:
+    print Player.localDesc[0][Player.localDesc[1].index(Player.location)].description
         
 def playerUse(Player):
     pass
@@ -101,33 +111,34 @@ def playerUse(Player):
 def checkInventory(Player):
     print Player.inventory
 
-def addInventory(item):
-    self.inventory.append(item)
+def addInventory(Player):
+    print(Player.localDesc[1].index(Player.location))
+    Player.inventory.append(Player.localDesc[0][(Player.localDesc[1].index(Player.location))].item)
 
 
 ###Classes###
 class Item:
-    def __init__(self, name):
+    def __init__(self, name, reagent):
         self.name = name
+        self.reagant = reagent
 
-    def Use(self):
-        pass
+    def Use(self, reagent):
+        if self.reagant == reagent:
+            return True
 
-    def Combine(self, combination):
-        pass
 
 #Player Class
 class Player:
-    def __init__(self, inventory, location, localDescription):
-        self.inventory = inventory
+    def __init__(self, inventory, location, localDesc):
+        self.inventory = []
         self.location = location
-        self.localDescription = localDescription
+        self.localDesc = localDesc
 
 
 class Area:
-    def __init__(self, description, interaction = None, items = None):
+    def __init__(self, name, description, item):
+        self.name = name
         self.description = description
-        self.interaction = interaction
-        self.items = items
+        self.item = item
     
 main()
