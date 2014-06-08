@@ -8,31 +8,17 @@ def main():
     ##Items
     
     ##Locations
-    Bed =   Area("Bed", "It is a nice bed with many soft pillows."
+    Areas = {Area("Bed", "It is a nice bed with many soft pillows."
                  " The blankets are are soft and inviting."
                  " You try to get the thought of how comfy"
-                 " the mattress was.", "Pillow")
-    Desk =  Area("Desk", "It's a desk. Not a good one.", "Screwdriver")
-    Door =  Area("Door", "The only door in this room. It is currently closed.",
-                 "Poster")
-    TV =    Area("TV","It's a nice LSD TV. It's out of"
-                 " this world man!", "Remote")
+                 " the mattress was.", "Pillow"),
+            Area("Desk", "It's a desk. Not a good one.", "Screwdriver"), 
+            Area("Door", "The only door in this room. It is currently closed.",
+                 "Poster"),
+            Area("TV","It's a nice LSD TV. It's out of"
+                 " this world man!", "Remote")}
     
-    AreaItem = {"Bed"  :   Bed.item,
-             "Desk" :   Desk.item,
-             "Door" :   Door.item,
-             "TV"   :   TV.item
-             }    
-    
-    
-    ##Realized flaw when items need to be picked up
-    AreaDesc = {"Bed"  :   Bed.description,
-             "Desk" :   Desk.description,
-             "Door" :   Door.description,
-             "TV"   :   TV.description
-             }
-    Areas = (Bed, Desk, Door, TV),("Bed", "Desk", "Door", "TV"),(Bed.item, Desk.item, TV.item)
-    print Areas[0][0].item
+   # print Areas[0][0].item
     ##Player initialization
     P = Player(("Keys", "Lemon", "The Monkey"),
                "Bed", Areas)
@@ -86,21 +72,27 @@ def playerMove(P):
     keyList = []
     
     print("Where do you want to go?")
-    for keys in P.localDesc[1]:
-        keyList.append(keys)
+    for keys in P.localDesc:
+        keyList.append(keys.name)
     print keyList
     choice = str(raw_input(">> "))
     print choice
-    if choice in P.location[1]:
-        print "You are already here"
-    elif choice in P.localDesc[1]:
-        P.location = choice
-        print "You move towards the " +P.location
-    else:
-        print "Location does not exist in this room"
-#
-#Indexes room
-#Player.localDesc[1].index(Player.location)
+    
+    ##Mental note for what code does
+    ##Code checks if player is currently in room and if location is real
+    for x in P.localDesc:
+        print x.name
+        if choice is P.location:
+            print "You are already here"
+            break
+        elif choice is x.name:
+            P.location = x.name
+            print "You move towards the " +P.location
+            break
+        else:
+            print "Location does not exist"
+            break
+
 def playerLook(Player):
     #if Player.location in Player.localDesc[1]:
     print Player.localDesc[0][Player.localDesc[1].index(Player.location)].description
@@ -117,7 +109,7 @@ def addInventory(Player):
 
 
 ###Classes###
-class Item:
+class Item(object):
     def __init__(self, name, reagent):
         self.name = name
         self.reagant = reagent
@@ -128,14 +120,14 @@ class Item:
 
 
 #Player Class
-class Player:
+class Player(object):
     def __init__(self, inventory, location, localDesc):
         self.inventory = []
         self.location = location
         self.localDesc = localDesc
 
 
-class Area:
+class Area(object):
     def __init__(self, name, description, item):
         self.name = name
         self.description = description
