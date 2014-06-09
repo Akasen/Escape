@@ -86,7 +86,7 @@ def playerMove(P):
         elif choice in x.name:
             P.location = x.name
             print "You move towards the " +P.location
-    if x is not P.localDesc:
+    if (choice not in P.localDesc) is True:
         print "That does not exist"
 
 def playerLook(Player):
