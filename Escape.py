@@ -81,21 +81,17 @@ def playerMove(P):
     ##Mental note for what code does
     ##Code checks if player is currently in room and if location is real
     for x in P.localDesc:
-        print x.name
         if choice is P.location:
-            print "You are already here"
-            break
-        elif choice is x.name:
+            print "You are already here" 
+        elif choice in x.name:
             P.location = x.name
             print "You move towards the " +P.location
-            break
-        else:
-            print "Location does not exist"
-            break
+    if x is not P.localDesc:
+        print "That does not exist"
 
 def playerLook(Player):
     #if Player.location in Player.localDesc[1]:
-    print Player.localDesc[0][Player.localDesc[1].index(Player.location)].description
+    print Player.areas.description
         
 def playerUse(Player):
     pass
