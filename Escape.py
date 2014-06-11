@@ -70,6 +70,7 @@ def checkGoal():
 #But I will figure out what I will do with this
 def playerMove(P):
     keyList = []
+    locationFound = False
     
     print("Where do you want to go?")
     for keys in P.localDesc:
@@ -82,11 +83,13 @@ def playerMove(P):
     ##Code checks if player is currently in room and if location is real
     for x in P.localDesc:
         if choice is P.location:
-            print "You are already here" 
+            print "You are already here"
+            locationFound = True 
         elif choice in x.name:
             P.location = x.name
             print "You move towards the " +P.location
-    if (choice not in P.localDesc) is True:
+            locationFound = True
+    if locationFound is False:
         print "That does not exist"
 
 def playerLook(Player):
@@ -100,8 +103,9 @@ def checkInventory(Player):
     print Player.inventory
 
 def addInventory(Player):
-    print(Player.localDesc[1].index(Player.location))
-    Player.inventory.append(Player.localDesc[0][(Player.localDesc[1].index(Player.location))].item)
+    for x in Player.localDesc:
+        if x.item == "Pillow":
+            print "PILLOW TALK!"
 
 
 ###Classes###
