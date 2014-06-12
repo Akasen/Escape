@@ -20,7 +20,7 @@ def main():
     
    # print Areas[0][0].item
     ##Player initialization
-    P = Player(("Keys", "Lemon", "The Monkey"),
+    P = Player(["Keys", "Lemon", "The Monkey"],
                "Bed", Areas)
     ##Commands
     commands = {"Inventory" :   checkInventory,
@@ -122,7 +122,7 @@ class Item(object):
 #Player Class
 class Player(object):
     def __init__(self, inventory, location, localDesc):
-        self.inventory = []
+        self.inventory = inventory
         self.location = location
         self.localDesc = localDesc
 
