@@ -8,30 +8,30 @@ def main():
     ##Items
     
     ##Locations
-    PlayerZones = [Area("Bed", "It is a nice bed with many soft pillows."
+    PlayerZones = [Area("bed", "It is a nice bed with many soft pillows."
                  " The blankets are are soft and inviting."
                  " You try to get the thought of how comfy"
                  " the mattress was.", ["Pillow"]),
-            Area("Desk", "It's a desk. Not a good one.", ["Screwdriver"]), 
-            Area("Door", "The only door in this room. It is currently closed.",
+            Area("desk", "It's a desk. Not a good one.", ["Screwdriver"]), 
+            Area("door", "The only door in this room. It is currently closed.",
                  ["Poster"]),
-            Area("TV","It's a nice LSD TV. It's out of"
+            Area("tv","It's a nice LSD TV. It's out of"
                  " this world man!", ["Remote"])]
     
    # print Areas[0][0].item
    
     ##Player initialization
     P = Player([],
-               "Bed", PlayerZones)
+               "bed", PlayerZones)
     ###INITIALIZATION END
     
     ##Commands
-    commands = {"Inventory" :   checkInventory,
-                "Pickup"    :   addInventory,
-                "Inspect"   :   playerLook,
-                "Look"      :   playerLook,
-                "Move"      :   playerMove,
-                "Use"       :   playerUse
+    commands = {"inventory" :   checkInventory,
+                "pickup"    :   addInventory,
+                "inspect"   :   playerLook,
+                "look"      :   playerLook,
+                "move"      :   playerMove,
+                "use"       :   playerUse
                 }
     print("You have waken up after a nice rest. But you don't"
           +" remember falling asleep. You don't remember this room."
@@ -51,10 +51,10 @@ def main():
 def playerInputCheck(commands):
     actionFound = False
     #Word list of player choice actions
-    actions = ["Pickup", "Look", "Inspect", "Use", "Move", "Walk", "Inventory"]
+    actions = ["pickup", "look", "inspect", "use", "move", "walk", "inventory"]
     playerInput = ''
     while actionFound != True:
-        playerInput = raw_input(">> ")
+        playerInput = raw_input(">> ").lower()
         if playerInput in commands:
             actionFound = True
     check = string.split(playerInput)
@@ -84,23 +84,25 @@ def playerMove(P):
     for keys in P.localChoices:
         keyList.append(keys.name)
     print keyList
-    choice = str(raw_input(">> "))
+    choice = str(raw_input(">> ").lower())
     print choice
     
+    if choice == P.location:
+        print("You are already here")
+        locationFound = True 
+
     ##Mental note for what code does
     ##Code checks if player is currently in room and if location is real
-    for x in P.localChoices:
-        if choice in P.location:
-            print "You are already here"
-            locationFound = True 
-            break
-        elif choice == x.name:
-            P.location = x.name
-            P.movement(x.name)
-            print "You move towards the " +P.location
-            locationFound = True
-    if locationFound is False:
-        print "That does not exist"
+    if(locationFound == False):
+        for x in P.localChoices:
+            if choice == x.name:
+                P.location = x.name
+                P.movement(x.name)
+                print "You move towards the " +P.location
+                locationFound = True
+                break
+        if locationFound is False:
+            print "That does not exist"
 
 def playerLook(P):
     #if Player.location in Player.localChoices[1]:
@@ -128,6 +130,10 @@ def addInventory(P):
 
 
 ###Classes###
+
+# Reagent refers to the object being used
+# Reagent refering to something that can be mixed or combined
+# I wanted to use a specific term that didn't need to be a camelcased variable
 class Item(object):
     def __init__(self, name, reagent):
         self.name = name
@@ -137,8 +143,7 @@ class Item(object):
         if self.reagant == reagent:
             return True
 
-
-#Player Class
+# Player Class
 class Player(object):
     def __init__(self, inventory, location, localChoices):
         self.inventory = inventory
@@ -154,6 +159,8 @@ class Player(object):
     def pickup(self, item):
         self.inventory.append(item)
 
+# Location Class
+# I will punch myself four years ago for not commenting this
 class Area(object):
     def __init__(self, name, description, item):
         self.name = name
